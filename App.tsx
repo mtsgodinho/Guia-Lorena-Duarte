@@ -20,7 +20,12 @@ const App: React.FC = () => {
   };
 
   const goToCheckout = () => {
-    window.location.href = KIRVANO_CHECKOUT_URL;
+    if (KIRVANO_CHECKOUT_URL && KIRVANO_CHECKOUT_URL !== "https://pay.kirvano.com/seu-link-aqui") {
+      window.location.href = KIRVANO_CHECKOUT_URL;
+    } else {
+      console.warn("URL de checkout não configurada.");
+      alert("O link de pagamento está sendo configurado. Por favor, tente novamente em instantes.");
+    }
   };
 
   const handleAnswer = (answer: string) => {
@@ -37,8 +42,15 @@ const App: React.FC = () => {
   const processResults = async (finalAnswers: QuizAnswer[]) => {
     setStep(FunnelStep.ANALYZING);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    const analysis = await generatePersonalizedAnalysis(finalAnswers);
-    setAnalysisText(analysis);
+    
+    try {
+      const analysis = await generatePersonalizedAnalysis(finalAnswers);
+      setAnalysisText(analysis);
+    } catch (err) {
+      console.error("Erro na análise:", err);
+      setAnalysisText("Você está no caminho certo para transformar seu faturamento.");
+    }
+
     setTimeout(() => {
       setStep(FunnelStep.RESULTS);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -87,6 +99,7 @@ const App: React.FC = () => {
                 src={LORENA_PHOTO} 
                 alt="Lorena Duarte" 
                 className="w-full h-full object-cover transition duration-700"
+                onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"}}
               />
             </div>
             <div className="glass absolute bottom-12 -left-8 md:-left-12 p-6 rounded-3xl shadow-xl max-w-[220px]">
@@ -203,7 +216,7 @@ const App: React.FC = () => {
               <h4 className="text-xs font-black uppercase tracking-[0.3em] text-rose-gold">Análise Estratégica</h4>
             </div>
             <p className="text-lg md:text-xl text-gray-700 leading-[1.8] italic font-serif">
-              {analysisText || "Finalizando sua análise estratégica baseada no Método 5 Pilares..."}
+              {analysisText || "Sua análise personalizada está sendo processada para entregar o melhor diagnóstico técnico..."}
             </p>
           </div>
         </div>

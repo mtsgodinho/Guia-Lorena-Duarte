@@ -2,9 +2,11 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { QuizAnswer } from "./types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function generatePersonalizedAnalysis(answers: QuizAnswer[]) {
+  // Inicializamos o cliente apenas dentro da função para evitar erro de 'process is not defined' no topo do arquivo
+  const apiKey = process.env.API_KEY || "";
+  const ai = new GoogleGenAI({ apiKey });
+
   const prompt = `
     Como uma especialista em faturamento para cabeleireiras (Lorena Duarte), escreva uma análise curta e altamente persuasiva para uma aluna em potencial.
     As respostas dela no quiz foram:
