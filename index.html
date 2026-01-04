@@ -11,7 +11,7 @@
       :root {
         --purple-deep: #5E239D;
         --rose-gold: #E4B7A0;
-        --nude-bg: #E5E1DD; /* Novo Fundo Cashmere Soft - Alto Contraste */
+        --nude-bg: #E5E1DD;
       }
       body {
         font-family: 'Inter', sans-serif;
@@ -49,6 +49,10 @@
         box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.08), 0 5px 15px -5px rgba(0, 0, 0, 0.04);
       }
     </style>
+    <script>
+      // Previne erro de 'process is not defined' que causa tela branca no navegador
+      window.process = window.process || { env: { API_KEY: "" } };
+    </script>
     <script type="importmap">
     {
       "imports": {
@@ -62,5 +66,7 @@
   </head>
   <body class="text-gray-900 overflow-x-hidden selection:bg-rose-gold/30">
     <div id="root"></div>
+    <!-- Script de entrada essencial para carregar o App -->
+    <script type="module" src="index.tsx"></script>
   </body>
 </html>
